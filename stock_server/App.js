@@ -1,23 +1,47 @@
-const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+const express = require("express");
 const cors = require("cors");
+const dotenv = require("dotenv");
+const usersRoutes = require("./modules/users/routes");
+
+dotenv.config();
 
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(express.json());
 
-app.use(bodyParser.json());
-app.use(cors());
+app.use("/api/users", usersRoutes);
 
-// const mongoURI = process.env.MONGO_URI || "your-mongodb-connection-string";
-// mongoose
-//   .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() => console.log("MongoDB connected"))
-//   .catch((err) => console.log(err));
+// MongoDB Connection with Logging
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB Connected Successfully!"))
+  .catch((err) => console.error("MongoDB Connection Error:", err));
 
-app.get("/", (req, res) => {
-  res.send("API is running");
+// Event Listeners to Log DB Status
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB Connection Established");
 });
 
-// const PORT = process.env.PORT || 5000;
-const PORT = 5000;
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB Connection Error:", err);
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.warn("MongoDB Disconnected. Reconnecting...");
+  mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+});
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
