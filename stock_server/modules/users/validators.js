@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const User = require("./userModel.js");
 
 const registerValidationRules = [
@@ -41,4 +41,25 @@ const registerValidationRules = [
   }),
 ];
 
-module.exports = registerValidationRules;
+const validateProfileUpdate = [
+  body("username")
+    .trim()
+    .notEmpty()
+    .withMessage("Username is required")
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Username must be between 3 to 20 characters"),
+  body("email").trim().isEmail().withMessage("Invalid email address"),
+  body("first_name").trim().notEmpty().withMessage("First name is required"),
+  body("last_name").trim().notEmpty().withMessage("Last name is required"),
+  body("gender").isIn(["0", "1"]).withMessage("Invalid gender selection"),
+  body("dob").trim().notEmpty().withMessage("Date of birth is required"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
+module.exports = { registerValidationRules, validateProfileUpdate };
