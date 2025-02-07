@@ -4,7 +4,6 @@ import { IconButton } from "@material-tailwind/react";
 import {
   Sidenav,
   DashboardNavbar,
-  Configurator,
   Footer,
 } from "@/widgets/layout";
 import routes from "@/routes";
@@ -24,7 +23,6 @@ export function Dashboard() {
       />
       <div className="p-4 xl:ml-80">
         <DashboardNavbar />
-        <Configurator />
         <IconButton
           size="lg"
           color="white"

@@ -9,7 +9,6 @@ import {
 } from "@material-tailwind/react";
 import {
   useMaterialTailwindController,
-  setOpenConfigurator,
   setSidenavColor,
   setSidenavType,
   setFixedNavbar,
@@ -65,9 +64,7 @@ export function Configurator() {
 
   return (
     <aside
-      className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-2.5 shadow-lg transition-transform duration-300 ${
-        openConfigurator ? "translate-x-0" : "translate-x-96"
-      }`}
+      className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-2.5 shadow-lg transition-transform duration-300 translate-x-96`}
     >
       <div className="flex items-start justify-between px-6 pt-8 pb-6">
         <div>
