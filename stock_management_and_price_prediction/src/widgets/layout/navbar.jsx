@@ -83,7 +83,7 @@ export function Navbar({ brandName, routes, action }) {
 }
 
 Navbar.defaultProps = {
-  brandName: "Material Tailwind React",
+  brandName: "Stock Management",
   action: (
     <a
       href=""

@@ -11,7 +11,14 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use((config) => {
     // NProgress.configure({ showSpinner: true });
     // NProgress.start();
-    return config;
+
+    const token = localStorage.getItem("token"); // Get token from localStorage
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`; // Attach JWT token
+  }
+
+  return config;
 });
 
 axiosInstance.interceptors.response.use(
