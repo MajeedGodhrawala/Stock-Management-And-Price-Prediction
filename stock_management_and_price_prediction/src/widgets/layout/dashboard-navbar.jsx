@@ -24,13 +24,14 @@ import {
 import { useUser } from "@/context/UserContext";
 import { useNavigate } from "react-router-dom";
 
+
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
 
-  const { logoutUser } = useUser();
+  const { logoutUser,user } = useUser();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -99,6 +100,17 @@ export function DashboardNavbar() {
           </IconButton>
             </MenuHandler>
             <MenuList className="w-max border-0">
+              <MenuItem className="flex items-center gap-4">
+              <div>
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="mb-1 font-normal"
+                >
+                  { user?.first_name } {user?.last_name}
+                </Typography>
+              </div>
+            </MenuItem>
             <MenuItem className="flex items-center gap-4" onClick={()=>{
               navigate("/dashboard/profile"); 
             }}>

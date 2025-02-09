@@ -25,6 +25,13 @@ export const routes = [
         show:true
       },
       {
+        icon: <ServerStackIcon {...icon} />,
+        name: "Stocks",
+        path: "/stock",
+        element: <Home />,
+        show:true
+      },
+      {
         icon: <UserCircleIcon {...icon} />,
         name: "profile",
         path: "/profile",

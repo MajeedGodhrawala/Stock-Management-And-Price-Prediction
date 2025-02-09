@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#nprogress .bar {
+    background: linear-gradient(
+        to right,
+        rgb(255, 0, 0) 33.33%,
+        rgb(1, 202, 1) 43.66%,
+        rgb(0, 162, 255) 100%
+    ) !important;
+    height: 3px !important;
+}
+
+#nprogress .spinner {
+    top: 105px !important;
+}
+
+#nprogress .spinner-icon {
+    width: 40px !important;
+    height: 40px !important;
+    border: solid 5px transparent !important;
+    border-left-color: rgb(0, 162, 255) !important;
+    border-top-color: rgb(255, 0, 0) !important;
+    border-bottom-color: rgb(1, 202, 1) !important;
+}

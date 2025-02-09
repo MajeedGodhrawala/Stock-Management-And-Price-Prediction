@@ -1,5 +1,5 @@
 import axios from "axios";
-// import NProgress from "nprogress";
+import NProgress from "nprogress";
 const baseUrl = 'http://localhost:5000';
 
 
@@ -9,13 +9,13 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-    // NProgress.configure({ showSpinner: true });
-    // NProgress.start();
+    NProgress.configure({ showSpinner: true });
+    NProgress.start();
 
-    const token = localStorage.getItem("token"); // Get token from localStorage
+    const token = localStorage.getItem("token"); 
 
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`; // Attach JWT token
+    config.headers.Authorization = `Bearer ${token}`; 
   }
 
   return config;
@@ -23,11 +23,11 @@ axiosInstance.interceptors.request.use((config) => {
 
 axiosInstance.interceptors.response.use(
     (response) => {
-        // NProgress.done();
+        NProgress.done();
         return response;
     },
     (error) => {
-        // NProgress.done();
+        NProgress.done();
 
         if (error.response) {
             if (error.response.status === 403) {

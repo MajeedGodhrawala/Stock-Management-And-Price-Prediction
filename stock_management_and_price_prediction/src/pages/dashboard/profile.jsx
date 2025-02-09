@@ -24,7 +24,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export function Profile() {
-  const { user } = useUser(); // Get logged-in user
+  const { user } = useUser(); 
   const [profile, setProfile] = useState({
   user_name : '',
   first_name : '',
