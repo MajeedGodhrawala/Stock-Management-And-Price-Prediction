@@ -6,12 +6,15 @@ import {
   ServerStackIcon,
   RectangleStackIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Profile, StockManagement,Tables, Notifications ,ManageUser} from "@/pages/dashboard";
+import { AdminDashboard, Profile, StockManagement,Tables, Notifications ,ManageUser} from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
 };
+
+const user =  JSON.parse(localStorage.getItem('user'));
+console.log(user?.id == '67a6962b00d871416f095e9f');
 
 export const routes = [
   {
@@ -19,17 +22,17 @@ export const routes = [
     pages: [
       {
         icon: <HomeIcon {...icon} />,
-        name: "dashboard",
-        path: "/home",
-        element: <Home />,
-        show:true
+        name: "Dashboard",
+        path: "/admin-dashboard",
+        element: <AdminDashboard />,
+        show:user?.id == '67a6962b00d871416f095e9f'
       },
       {
         icon: <ServerStackIcon {...icon} />,
         name: "Stocks Management",
         path: "/stock-management",
         element: <StockManagement />,
-        show:true
+        show:user?.id == '67a6962b00d871416f095e9f'
       },
       {
         icon: <UserCircleIcon {...icon} />,
@@ -63,7 +66,7 @@ export const routes = [
         name: "User",
         path: "/user",
         element: <ManageUser />,
-        show:true
+        show:user?.id == '67a6962b00d871416f095e9f'
       },
     ],
   },

@@ -13,6 +13,8 @@ export function SignIn() {
   const navigate = useNavigate();
   const { loginUser } = useUser();
 
+  const user =  JSON.parse(localStorage.getItem('user'));
+
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
 
@@ -45,7 +47,13 @@ export function SignIn() {
       loginUser(userWithoutCreatedAt);
 
       toast.success("Login successful!");
-      navigate("/dashboard"); 
+
+      if(user?.id == '67a6962b00d871416f095e9f'){
+        navigate("/dashboard/admin-dashboard"); 
+      }else {
+        navigate("/dashboard"); 
+      }
+      window.location.reload();
     })
     .catch(function (error) {
       toast.error(error.response?.data?.message || "Login failed!");
