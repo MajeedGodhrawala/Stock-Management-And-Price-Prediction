@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Typography, Card, CardHeader, CardBody } from "@material-tailwind/react";
 import ReactECharts from "echarts-for-react";
 import axiosInstance from "@/configs/axiosInstance";
+import { StatisticsCard } from "@/widgets/cards";
+import {
+  BanknotesIcon,
+  UserPlusIcon,
+  UsersIcon,
+  ChartBarIcon,
+} from "@heroicons/react/24/solid";
+
+
 
 export function AdminDashboard() {
   const [totalUsers, setTotalUsers] = useState(0);
@@ -82,28 +91,23 @@ export function AdminDashboard() {
     <div className="mt-12">
       {/* Static Cards */}
       <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader variant="gradient" color="blue" className="mb-4 p-6">
-            <Typography variant="h6" color="white">
-              Total Users
-            </Typography>
-          </CardHeader>
-          <CardBody>
-            <Typography variant="h3">{totalUsers}</Typography>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader variant="gradient" color="green" className="mb-4 p-6">
-            <Typography variant="h6" color="white">
-              Total Stocks
-            </Typography>
-          </CardHeader>
-          <CardBody>
-            <Typography variant="h3">{totalStocks}</Typography>
-          </CardBody>
-        </Card>
-      </div>
-
+      <StatisticsCard
+                  key={'total-users'}
+                  {...{ color:'gray',value:totalUsers }}
+                  title={'Total Users'}
+                  icon={React.createElement(UsersIcon, {
+                    className: "w-6 h-6 text-white",
+                  })}
+                />
+      <StatisticsCard
+                  key={'total-Stocks'}
+                  {...{ color:'gray',value:totalStocks }}
+                  title={'Total Stocks'}
+                  icon={React.createElement(BanknotesIcon, {
+                    className: "w-6 h-6 text-white",
+                  })}
+                />
+     </div>
       {/* Charts */}
       <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-2">
         <Card>
