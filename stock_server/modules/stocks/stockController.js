@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const multer = require("multer");
 const path = require("path");
 const XLSX = require("xlsx");
+const moment = require("moment");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -37,7 +38,7 @@ const createStock = async (req, res) => {
 
     if (req.files["historical_data_file"]) {
       const filePath = req.files["historical_data_file"][0].path;
-      console.log("Excel File Path:", filePath); // Log the file path
+      console.log("Excel File Path:", filePath);
 
       const historicalData = await processExcelFile(filePath, newStock._id);
       console.log("Historical Data to Insert:", historicalData);
@@ -116,19 +117,44 @@ const processExcelFile = async (filePath, stockId) => {
   try {
     const workbook = XLSX.readFile(filePath);
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const data = XLSX.utils.sheet_to_json(sheet);
+
+    // Read the sheet data without automatic date conversion
+    const data = XLSX.utils.sheet_to_json(sheet, { raw: true });
 
     console.log("Excel Data:", data);
 
-    const historicalData = data.map((row) => ({
-      stock_id: stockId,
-      date: new Date(row.Date),
-      open: row.Open,
-      high: row.High,
-      low: row.Low,
-      close: row.Close,
-      volume: row.Volume,
-    }));
+    const historicalData = data.map((row) => {
+      let rawDate = row.Date;
+      console.log(`Raw Date from Excel: ${rawDate}`);
+
+      let date;
+
+      // Check if the date is stored as an Excel serial number
+      if (typeof rawDate === "number") {
+        const parsedDate = XLSX.SSF.parse_date_code(rawDate);
+        date = new Date(Date.UTC(parsedDate.y, parsedDate.m - 1, parsedDate.d));
+      } else {
+        // If it's a string, try to parse it normally
+        date = new Date(rawDate);
+      }
+
+      console.log(`Parsed Date: ${date}`);
+
+      // Validate date
+      if (isNaN(date.getTime())) {
+        throw new Error(`Invalid date format: ${rawDate}`);
+      }
+
+      return {
+        stock_id: stockId,
+        date: date.toISOString(), // Store date in ISO format
+        open: parseFloat(row.Open),
+        high: parseFloat(row.High),
+        low: parseFloat(row.Low),
+        close: parseFloat(row.Close),
+        volume: parseInt(row.Volume, 10),
+      };
+    });
 
     console.log("Processed Historical Data:", historicalData);
 
@@ -139,6 +165,68 @@ const processExcelFile = async (filePath, stockId) => {
   }
 };
 
+const getStocks = async (req, res) => {
+  try {
+    // Fetch all stocks
+    const stocks = await Stock.find({});
+
+    // Transform the data to include currentPrice and previousPrice
+    const formattedStocks = await Promise.all(
+      stocks.map(async (stock) => {
+        // Fetch historical data for the current stock
+        const historicalData = await HistoricalStockData.find({
+          stock_id: stock._id,
+        })
+          .sort({ date: -1 }) // Sort by date in descending order (latest first)
+          .limit(2); // Limit to the latest 2 records
+
+        // Extract the latest and second-latest historical data points
+        const latestData = historicalData[0];
+        const previousData = historicalData[1];
+
+        return {
+          _id: stock._id,
+          name: stock.name,
+          short_name: stock.short_name,
+          stock_pic: stock.stock_pic,
+          currentPrice: latestData ? latestData.close : 0, // Use the latest close price
+          previousPrice: previousData ? previousData.close : 0, // Use the previous close price
+        };
+      })
+    );
+
+    // Send the response
+    res.status(200).json(formattedStocks);
+  } catch (error) {
+    console.error("Error fetching stocks:", error);
+    res.status(500).json({ message: "Failed to fetch stocks" });
+  }
+};
+
+const getHistoricalData = async (req, res) => {
+  try {
+    const stockId = req.params.id;
+
+    const historicalData = await HistoricalStockData.find({
+      stock_id: stockId,
+    }).sort({ date: 1 });
+
+    const formattedData = historicalData.map((data) => ({
+      date: data.date.toISOString().split("T")[0],
+      open: data.open,
+      close: data.close,
+      low: data.low,
+      high: data.high,
+      volume: data.volume,
+    }));
+
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error("Error fetching historical data:", error);
+    res.status(500).json({ message: "Failed to fetch historical data" });
+  }
+};
+
 module.exports = {
   createStock,
   getAllStocks,
@@ -146,4 +234,6 @@ module.exports = {
   updateStock,
   deleteStock,
   upload,
+  getStocks,
+  getHistoricalData,
 };

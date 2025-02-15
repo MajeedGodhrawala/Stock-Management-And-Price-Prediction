@@ -33,16 +33,16 @@ export function Home() {
       <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
         {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
           <StatisticsCard
-            key={title}
-            {...rest}
-            title={title}
+            key={stockkey}
+            {...{color: '', value:''}} // stock current value color according to it red or green
+            title={stock_short_name}
             icon={React.createElement(icon, {
               className: "w-6 h-6 text-white",
-            })}
+            })} // stock image in place of icon
             footer={
               <Typography className="font-normal text-blue-gray-600">
                 <strong className={footer.color}>{footer.value}</strong>
-                &nbsp;{footer.label}
+                &nbsp;{footer.label}  // stock other information or calculation and color 
               </Typography>
             }
           />

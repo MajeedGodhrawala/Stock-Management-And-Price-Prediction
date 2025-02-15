@@ -3,6 +3,8 @@ import { Dashboard, Auth } from "@/layouts";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "@/configs/PrivateRoute.jsx";
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 function App() {
 const user =  JSON.parse(localStorage.getItem('user'));

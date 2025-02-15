@@ -6,7 +6,7 @@ import {
   ServerStackIcon,
   RectangleStackIcon,
 } from "@heroicons/react/24/solid";
-import { AdminDashboard, Profile, StockManagement,Tables, Notifications ,ManageUser} from "@/pages/dashboard";
+import { AdminDashboard, Profile, StockManagement,Stock, Notifications ,ManageUser} from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -14,7 +14,6 @@ const icon = {
 };
 
 const user =  JSON.parse(localStorage.getItem('user'));
-console.log(user?.id == '67a6962b00d871416f095e9f');
 
 export const routes = [
   {
@@ -33,6 +32,13 @@ export const routes = [
         path: "/stock-management",
         element: <StockManagement />,
         show:user?.id == '67a6962b00d871416f095e9f'
+      },
+      {
+        icon: <ServerStackIcon {...icon} />,
+        name: "Stocks",
+        path: "/stock",
+        element: <Stock />,
+        show:user?.id != '67a6962b00d871416f095e9f'
       },
       {
         icon: <UserCircleIcon {...icon} />,
