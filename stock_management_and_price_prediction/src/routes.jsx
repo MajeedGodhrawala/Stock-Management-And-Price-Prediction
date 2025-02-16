@@ -6,7 +6,7 @@ import {
   ServerStackIcon,
   RectangleStackIcon,
 } from "@heroicons/react/24/solid";
-import { AdminDashboard, Profile, StockManagement,Stock, Notifications ,ManageUser,YourStock} from "@/pages/dashboard";
+import { AdminDashboard,UserDashboard, Profile, StockManagement,Stock, Notifications ,ManageUser,YourStock} from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -18,6 +18,7 @@ const user =  JSON.parse(localStorage.getItem('user'));
 export const routes = [
   {
     layout: "dashboard",
+    show:true,
     pages: [
       {
         icon: <HomeIcon {...icon} />,
@@ -25,6 +26,13 @@ export const routes = [
         path: "/admin-dashboard",
         element: <AdminDashboard />,
         show:user?.id == '67a6962b00d871416f095e9f'
+      },
+      {
+        icon: <HomeIcon {...icon} />,
+        name: "Dashboard",
+        path: "/user-dashboard",
+        element: <UserDashboard />,
+        show:user?.id != '67a6962b00d871416f095e9f'
       },
       {
         icon: <ServerStackIcon {...icon} />,
@@ -54,24 +62,11 @@ export const routes = [
         element: <Profile />,
         show:true
       },
-      // {
-      //   icon: <TableCellsIcon {...icon} />,
-      //   name: "tables",
-      //   path: "/tables",
-      //   element: <Tables />,
-      //   show:true
-      // },
-      // {
-      //   icon: <InformationCircleIcon {...icon} />,
-      //   name: "notifications",
-      //   path: "/notifications",
-      //   element: <Notifications />,
-      //   show:true
-      // },
     ],
   },
   {
     title: "User Management",
+    show:user?.id == '67a6962b00d871416f095e9f',
     layout: "dashboard",
     pages: [
       {

@@ -8,7 +8,7 @@ import 'swiper/css/navigation';
 
 function App() {
 const user =  JSON.parse(localStorage.getItem('user'));
-const default_route = user?.id == '67a6962b00d871416f095e9f' ? '/dashboard/admin-dashboard' : '/dashboard/home'
+const default_route = user?.id == '67a6962b00d871416f095e9f' ? '/dashboard/admin-dashboard' : '/dashboard/user-dashboard'
   return (
     <>
     <ToastContainer />

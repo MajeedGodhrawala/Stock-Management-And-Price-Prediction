@@ -68,9 +68,9 @@ export function SignUp() {
   
   return (
     <section className="m-8 flex">
-            <div className="w-2/5 h-full hidden lg:block">
+            <div className="w-2/5 h-screen hidden lg:block">
         <img
-          src="/img/pattern.png"
+          src="/img/blur-1853262_1280.jpg"
           className="h-full w-full object-cover rounded-3xl"
         />
       </div>

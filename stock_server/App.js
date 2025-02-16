@@ -7,6 +7,7 @@ const usersRoutes = require("./modules/users/routes");
 const stocksRoutes = require("./modules/stocks/routes");
 const userStocksRoutes = require("./modules/stocks/stockRoutes");
 const dashboardRoutes = require("./modules/admin_dashboard/routes");
+const userDashboardRoutes = require("./modules/user_dashboard/routes");
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/users", usersRoutes);
 app.use("/api/stocks", stocksRoutes);
 app.use("/api/user-stocks", userStocksRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/user-dashboard", userDashboardRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI, {

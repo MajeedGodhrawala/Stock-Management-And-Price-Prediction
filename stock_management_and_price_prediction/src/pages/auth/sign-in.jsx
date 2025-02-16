@@ -51,7 +51,7 @@ export function SignIn() {
       if(user?.id == '67a6962b00d871416f095e9f'){
         navigate("/dashboard/admin-dashboard"); 
       }else {
-        navigate("/dashboard"); 
+        navigate("/dashboard/user-dashboard"); 
       }
       window.location.reload();
     })
@@ -103,8 +103,8 @@ export function SignIn() {
         </form>
       </div>
 
-      <div className="w-2/5 h-full hidden lg:block">
-        <img src="/img/pattern.png" className="h-full w-full object-cover rounded-3xl" />
+      <div className="w-2/5 h-screen hidden lg:block">
+        <img src="/img/stock-trading-6525081_1280.jpg" className="h-full w-full object-cover rounded-3xl" />
       </div>
     </section>
   );

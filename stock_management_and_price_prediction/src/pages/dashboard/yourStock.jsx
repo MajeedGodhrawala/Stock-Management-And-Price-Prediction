@@ -21,7 +21,7 @@ import UserStockCard from "@/components/UserStockCard";
 import StockChart from "@/components/StockChart";
 
 export function YourStock() {
-  const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
+  const user = JSON.parse(localStorage.getItem("user"));
   const [userStocks, setUserStocks] = useState([]); // User-specific stocks
   const [stocks, setStocks] = useState([]); // All stocks with latest historical data
   const [loading, setLoading] = useState(true);
