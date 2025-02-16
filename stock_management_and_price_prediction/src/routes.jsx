@@ -6,7 +6,7 @@ import {
   ServerStackIcon,
   RectangleStackIcon,
 } from "@heroicons/react/24/solid";
-import { AdminDashboard, Profile, StockManagement,Stock, Notifications ,ManageUser} from "@/pages/dashboard";
+import { AdminDashboard, Profile, StockManagement,Stock, Notifications ,ManageUser,YourStock} from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -38,6 +38,13 @@ export const routes = [
         name: "Stocks",
         path: "/stock",
         element: <Stock />,
+        show:user?.id != '67a6962b00d871416f095e9f'
+      },
+      {
+        icon: <ServerStackIcon {...icon} />,
+        name: "Your Stock",
+        path: "/your-stock",
+        element: <YourStock />,
         show:user?.id != '67a6962b00d871416f095e9f'
       },
       {
