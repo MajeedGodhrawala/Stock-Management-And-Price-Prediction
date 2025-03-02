@@ -20,18 +20,27 @@ const getUserStocks = async (req, res) => {
 
 const getStockPerformanceData = async (req, res) => {
   try {
-    const userId = req.query.user_id; // Get user_id from query parameter
+    const userId = req.query.user_id;
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
 
+    // Fetch user's stocks
     const userStocks = await UserStock.find({ user_id: userId });
     const stockIds = userStocks.map((stock) => stock.stock_id);
 
+    // Fetch historical data for the user's stocks
     const performanceData = await HistoricalStockData.find({
       stock_id: { $in: stockIds },
     }).sort({ date: 1 });
-    res.status(200).json(performanceData);
+
+    // Aggregate data by date (assuming one stock for simplicity)
+    const aggregatedData = performanceData.map((item) => ({
+      date: item.date.toISOString().split("T")[0], // Format date as "YYYY-MM-DD"
+      close: item.close,
+    }));
+
+    res.status(200).json(aggregatedData);
   } catch (error) {
     console.error("Error fetching stock performance data:", error);
     res.status(500).json({ message: "Failed to fetch stock performance data" });

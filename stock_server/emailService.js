@@ -14,6 +14,7 @@ const sendWelcomeEmail = (email, name) => {
     to: email,
     subject: "Welcome to Our App!",
     text: `Hi ${name}, welcome to our app! We're excited to have you on board.`,
+    html: `<h1>Hi ${name},</h1><p>Welcome to our app! We're excited to have you on board.</p>`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

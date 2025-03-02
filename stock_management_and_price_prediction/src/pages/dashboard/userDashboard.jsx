@@ -46,21 +46,56 @@ export function UserDashboard() {
   const stockPerformanceChartOptions = {
     tooltip: {
       trigger: "axis",
+      formatter: (params) => {
+        const date = params[0].axisValue;
+        const value = params[0].data;
+        return `Date: ${date}<br/>Price: $${value}`;
+      },
     },
     xAxis: {
       type: "category",
       data: stockPerformanceData.map((item) => item.date),
+      axisLabel: {
+        formatter: (value) => {
+          // Format date as "YYYY-MM-DD"
+          return new Date(value).toLocaleDateString();
+        },
+        rotate: 45, // Rotate labels for better readability
+      },
+      name: "Date",
+      nameLocation: "middle",
+      nameGap: 30,
     },
     yAxis: {
       type: "value",
+      axisLabel: {
+        formatter: (value) => `$${value.toFixed(2)}`, // Format price as $X.XX
+      },
+      name: "Price",
+      nameLocation: "middle",
+      nameGap: 30,
     },
     series: [
       {
         name: "Stock Performance",
         type: "line",
         data: stockPerformanceData.map((item) => item.close),
+        smooth: true, // Smooth the line
+        lineStyle: {
+          color: "#1890ff", // Custom line color
+          width: 2,
+        },
+        itemStyle: {
+          color: "#1890ff", // Custom dot color
+        },
       },
     ],
+    grid: {
+      left: "10%",
+      right: "10%",
+      bottom: "20%",
+      containLabel: true,
+    },
   };
 
   // Chart options for profit and loss
@@ -106,7 +141,7 @@ export function UserDashboard() {
         />
       </div>
       {/* Charts */}
-      <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-2">
+      <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-1 ">
         <Card>
           <CardHeader variant="gradient" color="blue" className="mb-4 p-6">
             <Typography variant="h6" color="white">

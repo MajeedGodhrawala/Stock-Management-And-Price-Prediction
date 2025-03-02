@@ -8,6 +8,7 @@ const stocksRoutes = require("./modules/stocks/routes");
 const userStocksRoutes = require("./modules/stocks/stockRoutes");
 const dashboardRoutes = require("./modules/admin_dashboard/routes");
 const userDashboardRoutes = require("./modules/user_dashboard/routes");
+const twilio = require("twilio");
 
 dotenv.config();
 
@@ -28,6 +29,12 @@ app.use("/api/stocks", stocksRoutes);
 app.use("/api/user-stocks", userStocksRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/user-dashboard", userDashboardRoutes);
+
+// Twilio Client
+const client = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
 mongoose
   .connect(process.env.MONGO_URI, {

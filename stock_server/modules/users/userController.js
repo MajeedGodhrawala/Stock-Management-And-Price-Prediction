@@ -1,8 +1,58 @@
 const User = require("./userModel.js");
+const dotenv = require("dotenv");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-const { sendWelcomeEmail } = require("../../emailService.js");
+const nodemailer = require("nodemailer");
+const twilio = require("twilio");
+dotenv.config();
+
+// Function to send an email
+const sendEmail = async (email, name) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Welcome to Our App!",
+      text: `Hi ${name}, welcome to our app! We're excited to have you on board`,
+      html: `<h1>Hi ${name},</h1><p>Welcome to our app! We're excited to have you on board.</p>`,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Email sent to ${email}`);
+  } catch (error) {
+    console.error("❌ Error sending email:", error);
+  }
+};
+
+const client = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
+
+const sendSMS = async (name) => {
+  try {
+    const formattedNumber = `+91${9737324441}`;
+
+    const response = await client.messages.create({
+      body: `Hello ${name}, welcome to Stock Management App!`,
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: formattedNumber,
+    });
+
+    console.log("✅ SMS sent successfully:", response.sid);
+  } catch (error) {
+    console.error("❌ Error sending SMS:", error.message);
+  }
+};
 
 const registerUser = async (req, res) => {
   const errors = validationResult(req);
@@ -31,7 +81,10 @@ const registerUser = async (req, res) => {
     await newUser.save();
 
     // Send a welcome email
-    sendWelcomeEmail(email, first_name);
+    sendEmail(email, first_name);
+
+    //Send SMS
+    sendSMS(first_name);
 
     res
       .status(201)
@@ -58,6 +111,8 @@ const loginUser = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
+
+    // sendEmail(email, "");
 
     res.json({
       token,
