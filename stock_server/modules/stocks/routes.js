@@ -6,6 +6,7 @@ const {
   updateStock,
   deleteStock,
   upload,
+  predictStock,
 } = require("./stockController.js");
 const { stockValidationRules } = require("./validators.js");
 const protect = require("../../middlewares/authMiddleware.js");
@@ -17,5 +18,7 @@ router.get("/", protect, getAllStocks);
 router.get("/:id", protect, getStockById);
 router.put("/:id", protect, upload, stockValidationRules, updateStock);
 router.delete("/:id", protect, deleteStock);
+
+router.post("/stock-predict/:ticker", predictStock);
 
 module.exports = router;

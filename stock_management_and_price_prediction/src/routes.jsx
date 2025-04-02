@@ -5,8 +5,10 @@ import {
   InformationCircleIcon,
   ServerStackIcon,
   RectangleStackIcon,
+  CreditCardIcon,
+  CpuChipIcon
 } from "@heroicons/react/24/solid";
-import { AdminDashboard,UserDashboard, Profile, StockManagement,Stock, Notifications ,ManageUser,YourStock} from "@/pages/dashboard";
+import { AdminDashboard,UserDashboard, Profile, StockManagement,Stock, Notifications ,ManageUser,YourStock,StockPrediction} from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -49,10 +51,17 @@ export const routes = [
         show:user?.id != '67a6962b00d871416f095e9f'
       },
       {
-        icon: <ServerStackIcon {...icon} />,
+        icon: <CreditCardIcon {...icon} />,
         name: "Your Stock",
         path: "/your-stock",
         element: <YourStock />,
+        show:user?.id != '67a6962b00d871416f095e9f'
+      },
+      {
+        icon: <CpuChipIcon {...icon} />,
+        name: "Prediction",
+        path: "/stock-prediction",
+        element: <StockPrediction />,
         show:user?.id != '67a6962b00d871416f095e9f'
       },
       {

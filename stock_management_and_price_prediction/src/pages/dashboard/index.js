@@ -7,3 +7,4 @@ export * from "@/pages/dashboard/manageUser";
 export * from "@/pages/dashboard/stockManagement";
 export * from "@/pages/dashboard/stock";
 export * from "@/pages/dashboard/YourStock";
+export * from "@/pages/dashboard/StockPrediction";

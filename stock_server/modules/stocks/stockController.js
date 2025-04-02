@@ -5,6 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const XLSX = require("xlsx");
 const moment = require("moment");
+const axios = require("axios");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -227,6 +228,26 @@ const getHistoricalData = async (req, res) => {
   }
 };
 
+const predictStock = async (req, res) => {
+  try {
+    const { ticker } = req.query;
+
+    if (!ticker) {
+      return res.status(400).json({ error: "Ticker is required" });
+    }
+
+    // Call Flask API to predict stock price
+    const response = await axios.get(
+      `http://127.0.0.1:5000/predict?ticker=${ticker}`
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error predicting stock:", error);
+    res.status(500).json({ error: "Failed to predict stock price" });
+  }
+};
+
 module.exports = {
   createStock,
   getAllStocks,
@@ -236,4 +257,5 @@ module.exports = {
   upload,
   getStocks,
   getHistoricalData,
+  predictStock,
 };
